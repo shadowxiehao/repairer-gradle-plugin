@@ -15,11 +15,12 @@ plugins {
 apply(plugin = "license")
 
 pluginBundle {
-    website = "https://github.com/openrewrite/rewrite-gradle-plugin"
-    vcsUrl = "https://github.com/openrewrite/rewrite-gradle-plugin.git"
+    website = "https://github.com/shadowxiehao/repairer-gradle-plugin"
+    vcsUrl = "https://github.com/shadowxiehao/repairer-gradle-plugin.git"
     tags = listOf("rewrite", "refactoring", "java", "checkstyle","repairer")
 }
-
+group = "com.vifim"
+version = "0.9.0"
 gradlePlugin {
     plugins {
         create("rewriteMetrics") {
