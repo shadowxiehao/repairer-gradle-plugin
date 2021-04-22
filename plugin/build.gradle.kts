@@ -19,7 +19,7 @@ pluginBundle {
     vcsUrl = "https://github.com/shadowxiehao/repairer-gradle-plugin.git"
     tags = listOf("rewrite", "refactoring", "java", "checkstyle","repairer")
 }
-group = "com.vifim"
+group = "com.vifim.repairer"
 version = "0.9.0"
 gradlePlugin {
     plugins {
@@ -126,4 +126,20 @@ configure<LicenseExtension> {
     header = project.rootProject.file("gradle/licenseHeader.txt")
     mapping(mapOf("kt" to "SLASHSTAR_STYLE", "java" to "SLASHSTAR_STYLE"))
     strictCheck = true
+}
+
+
+publishing {
+    repositories {
+		mavenLocal()
+	}
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "com.vifim.repairer"
+            artifactId = "repairer"
+            version = "0.9.0"
+
+            from(components["java"])
+        }
+    }
 }
