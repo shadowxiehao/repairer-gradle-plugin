@@ -1,3 +1,7 @@
 rootProject.name = "rewrite-gradle-plugin"
 
-include("plugin")
+include(
+    "plugin",
+    "rewrite-java-repairer",
+    "rewrite-core"
+)

@@ -8,7 +8,7 @@ plugins {
     groovy
     `java-gradle-plugin`
     id("com.gradle.plugin-publish") version ("0.13.0")
-    id("com.github.hierynomus.license") version "0.15.0" apply false
+    // id("com.github.hierynomus.license") version "0.15.0" apply false
     `maven-publish`
 }
 
@@ -19,8 +19,16 @@ pluginBundle {
     vcsUrl = "https://github.com/shadowxiehao/repairer-gradle-plugin.git"
     tags = listOf("rewrite", "refactoring", "java", "checkstyle","repairer")
 }
-group = "com.vifim.repairer"
-version = "0.9.0"
+
+// Fixed version numbers because com.gradle.plugin-publish will publish poms with requested rather than resolved versions
+val rewriteVersion = "7.2.1"
+val prometheusVersion = "1.3.0"
+val nettyVersion = "1.1.0"
+val repairerVersion="0.9.1"
+val repairerGroup="com.vifim.repairer"
+
+group = "$repairerGroup"
+version = "$repairerVersion"
 gradlePlugin {
     plugins {
         create("rewriteMetrics") {
@@ -66,18 +74,15 @@ val plugin: Configuration by configurations.creating
 
 configurations.getByName("compileOnly").extendsFrom(plugin)
 
-// Fixed version numbers because com.gradle.plugin-publish will publish poms with requested rather than resolved versions
-val rewriteVersion = "7.1.0"
-val prometheusVersion = "1.3.0"
-val nettyVersion = "1.1.0"
 
-configurations.all {
-    resolutionStrategy.eachDependency {
-        if (requested.group == "org.openrewrite") {
-            useVersion(rewriteVersion)
-        }
-    }
-}
+
+// configurations.all {
+//     resolutionStrategy.eachDependency {
+//         if (requested.group == "org.openrewrite") {
+//             useVersion(rewriteVersion)
+//         }
+//     }
+// }
 
 dependencies {
     plugin("org.openrewrite:rewrite-java:$rewriteVersion")
@@ -90,7 +95,9 @@ dependencies {
     implementation("org.openrewrite:rewrite-maven:$rewriteVersion")
     implementation("org.openrewrite:rewrite-properties:$rewriteVersion")
     implementation("org.openrewrite:rewrite-yaml:$rewriteVersion")
-    api("org.openrewrite:rewrite-java:$rewriteVersion")
+
+    api(project(":rewrite-java-repairer"))
+    // api("org.openrewrite:rewrite-java:$rewriteVersion")
     api("io.micrometer.prometheus:prometheus-rsocket-client:$prometheusVersion")
     api("io.rsocket:rsocket-transport-netty:$nettyVersion")
 
@@ -135,9 +142,9 @@ publishing {
 	}
     publications {
         create<MavenPublication>("maven") {
-            groupId = "com.vifim.repairer"
+            groupId = "$repairerGroup"
             artifactId = "repairer"
-            version = "0.9.0"
+            version = "$repairerVersion"
 
             from(components["java"])
         }
